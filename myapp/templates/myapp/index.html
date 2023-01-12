@@ -19,5 +19,9 @@
     </select>
     <button class="btn btn-primary" type="submit">Submit</button>
   </form>
+
+  {% for c in user_food %}
+  {{c.food_consumed}}
+  {% endfor %}
 </body>
 </html>
