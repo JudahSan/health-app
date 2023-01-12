@@ -9,14 +9,15 @@
   <title>Document</title>
 </head>
 <body>
-  <form action=>
+  <form method="POST">
     {% csrf_token %}
-    <select name="" id="">
+    <select name="food_consumed" id="food_consumed
       {% for food in foods %}
         <option value="{{food.name}}">{{food.name}}
         </option>
       {% endfor %}
     </select>
+    <button class="btn btn-primary" type="submit">Submit</button>
   </form>
 </body>
 </html>
