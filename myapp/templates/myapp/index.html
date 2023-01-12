@@ -21,7 +21,7 @@
   </form>
 
   {% for c in user_food %}
-  {{c.food_consumed}}
+  {{c.food_consumed}} --> {{c.food_consumed.carbs}} --> {{c.food_consumed.protein}} --> {{c.food_consumed.fats}} --> {{c.food_consumed.calories}} <br>
   {% endfor %}
 </body>
 </html>
