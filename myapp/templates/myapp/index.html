@@ -12,16 +12,32 @@
 
   <!-- Styling -->
   <div class="container">
+    <br>
+    <br>
+    <br>
+
+    <h4>Healthy Eating Plan</h4>
+    <br>
+    
+    <div class="row">
+      <div class="col-md-9 offset-1">
+        <div class="progress">
+          <div class="progress-bar bg-success" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+      </div>
+    </div>
+      <br>
+      <br>
     <div class="row">
       <div class="col-md-12">
         <form method="POST">
           <div class="form-group row">
             {% csrf_token %}
             <label class="col-md-3">
-              <h3>Food Nutrient  <span class="badge badge-secondary">New</span></h3>
+              <h3>Nutrition Guide  <span class="badge badge-secondary">v1</span></h3>
             </label>
             <select class="col-md-7 form-select form-select-lg" name="food_consumed" id="food_consumed aria-label=".form-select-lg example">
-              <option selected>Select food from menu </option>
+              <option selected>Food Selection </option>
               {% for food in foods %}
                 
                 <option value="{{food.name}}">{{food.name}}
@@ -93,7 +109,19 @@
   document.getElementById("totalCarbs").innerHTML='<b>' + carbs+'(gm)</b>' ;
   document.getElementById("totalProteins").innerHTML='<b>' + protein+'(gm)</b>';
   document.getElementById("totalFats").innerHTML='<b>' + fats+'(gm)</b>';
-  document.getElementById("totalCalories").innerHTML='<b>' + calories+'(gm)</b>';
+  document.getElementById("totalCalories").innerHTML='<b>' + calories+'(Kcal)</b>';
+
+  // Calculate calories percentage
+  let dailyCalorieGoal;
+  if(localStorage.getItem('dailyCalorieGoal')){
+    dailyCalorieGoal = localStorage.getItem('dailyCalorieGoal');
+  } else {
+    dailyCalorieGoal = prompt('Please enter your daily calorie goal');
+    localStorage.setItem('dailyCalorieGoal', dailyCalorieGoal);
+  }
+
+  let caloricPercentage = (calories / dailyCalorieGoal) * 100;
+  document.getElementsByClassName("progress-bar")[0].setAttribute("style", "width:"+caloricPercentage+"%")
 
 
   // Test if td was removed
