@@ -90,10 +90,10 @@
   console.log("Total Fats: " + fats);
   console.log("Total Calories: " + calories);
 
-  document.getElementById("totalCarbs").innerHTML=carbs;
-  document.getElementById("totalProteins").innerHTML=protein;
-  document.getElementById("totalFats").innerHTML=fats;
-  document.getElementById("totalCalories").innerHTML=calories;
+  document.getElementById("totalCarbs").innerHTML='<b>' + carbs+'(gm)</b>' ;
+  document.getElementById("totalProteins").innerHTML='<b>' + protein+'(gm)</b>';
+  document.getElementById("totalFats").innerHTML='<b>' + fats+'(gm)</b>';
+  document.getElementById("totalCalories").innerHTML='<b>' + calories+'(gm)</b>';
 
 
   // Test if td was removed
