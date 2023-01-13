@@ -5,23 +5,135 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   <title>Document</title>
 </head>
 <body>
-  <form method="POST">
-    {% csrf_token %}
-    <select name="food_consumed" id="food_consumed
-      {% for food in foods %}
-        <option value="{{food.name}}">{{food.name}}
-        </option>
-      {% endfor %}
-    </select>
-    <button class="btn btn-primary" type="submit">Submit</button>
-  </form>
 
-  {% for c in user_food %}
-  {{c.food_consumed}} --> {{c.food_consumed.carbs}} --> {{c.food_consumed.protein}} --> {{c.food_consumed.fats}} --> {{c.food_consumed.calories}} <br>
-  {% endfor %}
+  <!-- Styling -->
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form method="POST">
+          <div class="form-group row">
+            {% csrf_token %}
+            <label class="col-md-3">
+              <h3>Food Nutrient  <span class="badge badge-secondary">New</span></h3>
+            </label>
+            <select class="col-md-7 form-select form-select-lg" name="food_consumed" id="food_consumed aria-label=".form-select-lg example">
+              <option selected>Select food from menu </option>
+              {% for food in foods %}
+                
+                <option value="{{food.name}}">{{food.name}}
+                </option>
+              {% endfor %}
+            </select>
+            <button class="btn btn-success" type="submit">Submit</button>
+          </div>   
+        </form>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+          <h4>My Daily Nutrients</h4>
+        </div>
+
+        <table id="table" class="table table-striped table-active">
+
+            <tr class="bg-dark text-white" >
+              <td>Food </td>
+              <td>Carbs (gm) </td>
+              <td>Protein (gm) </td>
+              <td>Fats (gm) </td>
+              <td>Calories (Kcal) </td>
+            </tr>
+          
+            {% for c in user_food %}
+            <tr>
+              <td>{{c.food_consumed.name}} </td>
+              <td>{{c.food_consumed.carbs}} </td>
+              <td>{{c.food_consumed.protein}} </td>
+              <td>{{c.food_consumed.fats}} </td>
+              <td>{{c.food_consumed.calories}} </td>
+            </tr>
+            {% endfor %}
+            <tr>
+              <td id="name"><b>Total</b></td>
+              <td id="totalCarbs"></td>
+              <td id="totalProteins"></td>
+              <td id="totalFats"></td>
+              <td id="totalCalories"></td>
+            </tr>
+
+        </table>
+    </div>
+    <div class="col-md-5 offset-1"></div>
+  </div>
 </body>
+<script>
+  console.log('Print me');
+  let table = document.getElementById("table");
+  let carbs=0, protein=0, fats=0, calories=0;
+
+  for (let i = 1; i < table.rows.length - 1; i++) {
+    let currentRow = table.rows[i];
+
+    carbs += Math.round(parseFloat(currentRow.cells[1].innerHTML));
+    protein += Math.round(parseFloat(currentRow.cells[2].innerHTML));
+    fats += Math.round(parseFloat(currentRow.cells[3].innerHTML));
+    calories += Math.round(parseFloat(currentRow.cells[4].innerHTML));
+
+
+  }
+  console.log("Total Carbs: " + carbs);
+  console.log("Total Protein: " + protein);
+  console.log("Total Fats: " + fats);
+  console.log("Total Calories: " + calories);
+
+  document.getElementById("totalCarbs").innerHTML=carbs;
+  document.getElementById("totalProteins").innerHTML=protein;
+  document.getElementById("totalFats").innerHTML=fats;
+  document.getElementById("totalCalories").innerHTML=calories;
+
+
+  // Test if td was removed
+  // for (let i = 0; i < table.rows.length; i++) {
+  //     for (let j = 0; j < table.rows[i].cells.length; j++) {
+  //         let currentCell = table.rows[i].cells[j];
+  //         let cellData = currentCell.innerHTML;
+  //         currentCell.parentNode.removeChild(currentCell);
+  //         let newCell = table.rows[i].insertCell(j);
+  //         // newCell.innerHTML = cellData;
+  //         // console.log(newCell.innerHTML === cellData);
+  //         console.log(newCell);
+  //     }
+  // }
+
+  // Check if `td` element is defined and has an innerHTML property
+  // Check if parseFloat() method is able to parse the value before 
+  // adding it to the nutrient content variable
+
+// iterate through each row of the table
+// Doesn't work
+  // for (let i = 1; i < table.rows.length; i++) {
+  //     // check if the element is defined and has an innerHTML property
+  //     if (table.rows[i].cells[1].innerHTML && table.rows[i].cells[2].innerHTML && table.rows[i].cells[3].innerHTML && table.rows[i].cells[4].innerHTML) {
+  //         // parse the innerHTML of the cells as floats and add them to the nutrient content variables
+  //         carbs += parseFloat(table.rows[i].cells[1].innerHTML);
+  //         protein += parseFloat(table.rows[i].cells[2].innerHTML);
+  //         fats += parseFloat(table.rows[i].cells[3].innerHTML);
+  //         calories += parseFloat(table.rows[i].cells[4].innerHTML);
+  //     } else {
+  //         console.log("element is not defined or has no innerHTML property at index: ", i);
+  //     }
+  // }
+
+
+  // ES6
+  // for (const row of table) {
+  //   for (let i = 1; i < row.length - 1; i++) {
+  //     console.log(row[i]);
+  //   }
+  // }
+</script>
 </html>
