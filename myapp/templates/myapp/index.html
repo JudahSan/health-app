@@ -6,14 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.1.2/chart.min.js" integrity="sha512-fYE9wAJg2PYbpJPxyGcuzDSiMuWJiw58rKa9MWQICkAqEO+xeJ5hg5qPihF8kqa7tbgJxsmgY0Yp51+IMrSEVg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js"></script>
   <title>Document</title>
 </head>
 <body>
 
   <!-- Styling -->
   <div class="container">
-    <br>
-    <br>
+    <div class="row">
+      <div class="col-md-12">
+        <nav class="navbar navbar-dark bg-dark">
+          <span class="navbar-brand">Nutrition Senpai</span>
+        </nav>
+      </div>
+    </div>
     <br>
 
     <h4>Healthy Eating Plan</h4>
@@ -83,7 +90,20 @@
 
         </table>
     </div>
+    <br>
+    <br>
     <div class="col-md-5 offset-1"></div>
+      <div class="">
+        <h4>
+          Daily Progress
+        </h4>
+      </div>
+      <div class="card-header text-white bg-dark">
+        <h4>Diet Chart</h4>
+      </div>
+      <div class="col-md-12">
+        <canvas id="doughnut-chart" width="400" height="400"></canvas>
+      </div>
   </div>
 </body>
 <script>
@@ -112,18 +132,67 @@
   document.getElementById("totalCalories").innerHTML='<b>' + calories+'(Kcal)</b>';
 
   // Calculate calories percentage
+  /*
+  * This code prompts the user to enter their daily calorie goal, 
+  * if the goal has already been set, it will retrieve the value from local storage
+  * and will not prompt the user again.
+  */
   let dailyCalorieGoal;
   if(localStorage.getItem('dailyCalorieGoal')){
+    //retrieve the dailyCalorieGoal from local storage if it exists
     dailyCalorieGoal = localStorage.getItem('dailyCalorieGoal');
   } else {
+    //prompt the user to enter their daily calorie goal
     dailyCalorieGoal = prompt('Please enter your daily calorie goal');
+    //save the dailyCalorieGoal in the local storage
     localStorage.setItem('dailyCalorieGoal', dailyCalorieGoal);
   }
+
 
   let caloricPercentage = (calories / dailyCalorieGoal) * 100;
   document.getElementsByClassName("progress-bar")[0].setAttribute("style", "width:"+caloricPercentage+"%")
 
-
+  const ctx = document.getElementById('doughnut-chart').getContext('2d');
+    const data = {
+        labels: ['Carbs', 'Protein', 'Fats', 'Calories'],
+        datasets: [{
+            label: 'Nutrition',
+            data: [20, 30, 25, 25],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+                'rgba(54, 162, 235, 0.2)',
+                'rgba(255, 206, 86, 0.2)',
+                'rgba(75, 192, 192, 0.2)'
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+                'rgba(54, 162, 235, 1)',
+                'rgba(255, 206, 86, 1)',
+                'rgba(75, 192, 192, 1)'
+            ],
+            borderWidth: 1
+        }]
+    };
+    const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutoutPercentage: 60,
+        legend: {
+            position: 'bottom'
+        },
+        plugins: {
+            labels: {
+                render: 'value',
+                fontColor: '#fff',
+                precision: 2
+            }
+        }
+    };
+    const chart = new Chart(ctx, {
+        type: 'doughnut',
+        data,
+        options
+    });
   // Test if td was removed
   // for (let i = 0; i < table.rows.length; i++) {
   //     for (let j = 0; j < table.rows[i].cells.length; j++) {
